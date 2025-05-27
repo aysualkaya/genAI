@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class PatchGANDiscriminator(nn.Module):
-    def __init__(self, in_channels=1, features=[64, 128, 256, 512]):
+    def __init__(self, in_channels=2, features=[64, 128, 256, 512]):  # 🟢 1 → 2 yaptık
         super(PatchGANDiscriminator, self).__init__()
         
         layers = []
@@ -14,7 +14,7 @@ class PatchGANDiscriminator(nn.Module):
             layers.append(nn.LeakyReLU(0.2))
             in_channels = feature
         
-        # Son katman (1 kanal, tek çıkış)
+        # Son katman (tek çıktı kanalı)
         layers.append(nn.Conv2d(features[-1], 1, kernel_size=4, stride=1, padding=1))
         
         self.model = nn.Sequential(*layers)
@@ -25,6 +25,6 @@ class PatchGANDiscriminator(nn.Module):
 # Test etmek istersen
 if __name__ == "__main__":
     model = PatchGANDiscriminator()
-    x = torch.randn((1, 1, 128, 128))
+    x = torch.randn((1, 2, 128, 128))  # 🟢 1 → 2 kanal test verisi
     out = model(x)
-    print(out.shape)  # Beklenen çıktı: (1, 1, 16, 16)
+    print(out.shape)  # Beklenen çıktı: (1, 1, H, W)

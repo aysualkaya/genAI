@@ -1,27 +1,31 @@
 import os
-from PIL import Image
+import numpy as np
+import torch
 from torch.utils.data import Dataset
 
 class PETDataset(Dataset):
-    def __init__(self, inp_dir, gt_dir, transform=None):
-        self.inp_dir = inp_dir
-        self.gt_dir = gt_dir
-        self.inp_files = sorted(os.listdir(inp_dir))
-        self.gt_files = sorted(os.listdir(gt_dir))
-        self.transform = transform
+    def __init__(self, low_dir, high_dir):
+        self.low_data = []
+        self.high_data = []
+
+        filenames = sorted(os.listdir(low_dir))
+        for filename in filenames:
+            low_volume = np.load(os.path.join(low_dir, filename), allow_pickle=True)
+            high_volume = np.load(os.path.join(high_dir, filename), allow_pickle=True)
+
+            # Her slice'ı ayrı örnek olarak kaydet
+            for i in range(low_volume.shape[0]):
+                self.low_data.append(low_volume[i])
+                self.high_data.append(high_volume[i])
 
     def __len__(self):
-        return len(self.inp_files)
+        return len(self.low_data)
 
     def __getitem__(self, idx):
-        inp_path = os.path.join(self.inp_dir, self.inp_files[idx])
-        gt_path = os.path.join(self.gt_dir, self.gt_files[idx])
-        
-        inp_img = Image.open(inp_path).convert('L')
-        gt_img = Image.open(gt_path).convert('L')
-        
-        if self.transform:
-            inp_img = self.transform(inp_img)
-            gt_img = self.transform(gt_img)
+        low = np.expand_dims(self.low_data[idx], axis=0)  # [1, H, W]
+        high = np.expand_dims(self.high_data[idx], axis=0)
 
-        return inp_img, gt_img
+        return {
+            'low': torch.tensor(low, dtype=torch.float32),
+            'high': torch.tensor(high, dtype=torch.float32)
+        }
