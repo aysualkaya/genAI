@@ -9,7 +9,7 @@ This project enhances ultra-low-dose PET images in breast cancer(breast cancer d
 - matplotlib
 - scikit-image
 
-#Summary
+# Summary
 - Designed and implemented ModelILGenerator, a task-specific PET/CT fusion model.
 - Adapted low-dose simulation logic for realism.
 - Conducted visual and metric-based comparisons with existing diffusion pipelines.
