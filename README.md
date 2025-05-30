@@ -9,28 +9,6 @@ This project enhances ultra-low-dose PET images in breast cancer(breast cancer d
 - matplotlib
 - scikit-image
 
-#File Structure
-PET_SR_PROJECT/
-├── genAI/
-│   ├── data/
-│   │   ├── raw_dicom/
-│   │   ├── high_dose/
-│   │   └── low_dose/
-│   ├── datasets/
-│   │   └── pet_dataset.py
-│   ├── models/
-│   │   ├── model_il.py             ← Custom ModelILGenerator architecture
-│   │   ├── discriminator.py        ← PatchGAN
-│   │   └── simple_sr.py            ← Alternative baseline model
-│   ├── train_fusion_gan.py         ← Main training loop
-│   ├── simulate_low_dose_fusion.py← Simulation code (Poisson noise)
-│   ├── convert_pet_ct_pair.py      ← DICOM to NumPy preprocessor
-│   ├── evaluate.py                 ← Evaluation metrics + visualization
-│   └── plot_losses.py              ← Training curve visualization
-├── generator_gan.pth               ← Pretrained model weights
-├── final_training_loss.png         ← Loss graph
-└── README.md                       ← 
-
 #Summary
 - Designed and implemented ModelILGenerator, a task-specific PET/CT fusion model.
 - Adapted low-dose simulation logic for realism.
